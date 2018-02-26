@@ -35,7 +35,11 @@ Android
 3. Create a standalone NDK toolchain for the platform you're interested in (e.g. android-23 or android-24). Do this from the NDK itself. The following command creates a standalone NDK toolchain in /Users/radvani/Source/ndk-toolchain/android-23, for platform android-23:
 
 cd NDK_PATH/build/tools
-./make-standalone-toolchain.sh --platform=android-23 --install-dir=/Users/radvani/Source/ndk-toolchain/android-23
+(on Raj's computer: /Users/radvani/Library/Android/sdk/ndk-bundle/build/tools)
+
+./make-standalone-toolchain.sh --platform=android-23 --stl=libc++ --install-dir=/Users/radvani/Source/ndk-toolchain/android-23
+
+(Note: when ready to switch to libc++ STL, add the -stl=libc++ argument when creating the toolchain)
 
 (NDK path can be found in Android Studio -> Project Structure -> SDK Location -> NDK Location)
 
@@ -45,4 +49,4 @@ export NDK=YOUR_NDK_ROOT
 export PATH=YOUR_NDK_STAND_ALONE_TOOL_PATH/bin:$PATH
 export SYSROOT=YOUR_NDK_STAND_ALONE_TOOL_PATH/sysroot
 
-5. 5. Run the script. The protobuf/include folder will contain the headers, and the libs will be in protobuf/lib. Use libprotobuf-lite.so.
+5. Run the script. The protobuf/include folder will contain the headers, and the libs will be in protobuf/lib. Use libprotobuf-lite.so.
