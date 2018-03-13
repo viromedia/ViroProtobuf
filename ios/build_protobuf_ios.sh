@@ -10,7 +10,6 @@ echo "$(tput sgr0)"
 # Set each to '1' to include, '0' to exclude.
 BUILD_X86_64_MAC=1
 BUILD_X86_64_IOS_SIM=1
-BUILD_I386_IOS_SIM=0
 BUILD_ARMV7_IPHONE=0
 BUILD_ARMV7S_IPHONE=0
 BUILD_ARM64_IPHONE=0
@@ -24,7 +23,7 @@ PB_VERSION=3.2.0
 GOOGLE_NAMESPACE=google_public
 
 # Set this to the minimum iOS SDK version you wish to support.
-IOS_MIN_SDK=7.0
+IOS_MIN_SDK=9.1
 
 (
 
@@ -37,8 +36,6 @@ XCODEDIR=`xcode-select --print-path`
 
 OSX_SDK=$(xcodebuild -showsdks | grep macosx | sort | head -n 1 | awk '{print $NF}')
 IOS_SDK=$(xcodebuild -showsdks | grep iphoneos | sort | head -n 1 | awk '{print $NF}')
-SIM_SDK=$(xcodebuild -showsdks | grep iphonesimulator | sort | head -n 1 | awk '{print $NF}')
-
 
 MACOSX_PLATFORM=${XCODEDIR}/Platforms/MacOSX.platform
 MACOSX_SYSROOT=${MACOSX_PLATFORM}/Developer/${OSX_SDK}.sdk
@@ -46,8 +43,8 @@ MACOSX_SYSROOT=${MACOSX_PLATFORM}/Developer/${OSX_SDK}.sdk
 IPHONEOS_PLATFORM=${XCODEDIR}/Platforms/iPhoneOS.platform
 IPHONEOS_SYSROOT=${IPHONEOS_PLATFORM}/Developer/SDKs/${IOS_SDK}.sdk
 
-IPHONESIMULATOR_PLATFORM=${XCODEDIR}/Platforms/iPhoneSimulator.platform
-IPHONESIMULATOR_SYSROOT=${IPHONESIMULATOR_PLATFORM}/Developer/SDKs/${SIM_SDK}.sdk
+IPHONESIMULATOR_SDK="iphonesimulator"
+IPHONESIMULATOR_SYSROOT=$(xcrun -sdk ${IPHONESIMULATOR_SDK} --show-sdk-path)
 
 CC=clang
 CFLAGS="-DNDEBUG -g -O0 -pipe -fPIC -fcxx-exceptions"
@@ -152,14 +149,41 @@ echo " x86_64 for iPhone Simulator"
 echo "###########################"
 echo "$(tput sgr0)"
 
-(
-    cd /tmp/protobuf-$PB_VERSION
-    ./autogen.sh
-    make distclean
-    ./configure --build=x86_64-apple-darwin13.0.0 --host=x86_64-apple-darwin13.0.0 --with-protoc=${PREFIX}/platform/x86_64/bin/protoc --disable-shared --prefix=${PREFIX} --exec-prefix=${PREFIX}/platform/x86_64_ios "CC=${CC}" "CFLAGS=${CFLAGS} -miphoneos-version-min=${IOS_MIN_SDK} -arch x86_64 -isysroot ${IPHONESIMULATOR_SYSROOT}" "CXX=${CXX}" "CXXFLAGS=${CXXFLAGS} -arch x86_64 -isysroot ${IPHONESIMULATOR_SYSROOT} -miphonesimulator-version-min=${IOS_MIN_SDK}" LDFLAGS="-arch x86_64 -miphonesimulator-version-min=${IOS_MIN_SDK} ${LDFLAGS}" "LIBS=${LIBS}"
-    make ${EXTRA_MAKE_FLAGS}
-    make ${EXTRA_MAKE_FLAGS} install
-)
+OPT_FLAGS="-Os -g3"
+MAKE_JOBS=4
+
+dobuild() {
+    export CC="$(xcrun -find -sdk ${SDK} cc)"
+    export CXX="$(xcrun -find -sdk ${SDK} cxx)"
+    export CPP="$(xcrun -find -sdk ${SDK} cpp)"
+    export CFLAGS="${HOST_FLAGS} ${OPT_FLAGS}"
+    export CXXFLAGS="${HOST_FLAGS} ${OPT_FLAGS}"
+    export LDFLAGS="${HOST_FLAGS}"
+
+    ./configure --host=${CHOST} --with-protoc=${PREFIX}/platform/x86_64/bin/protoc --prefix=${PREFIX} --exec-prefix=${PREFIX}/platform/x86_64_ios --enable-static --disable-shared
+
+    make clean
+    make -j${MAKE_JOBS}
+    make install
+}
+
+SDK="iphonesimulator"
+ARCH_FLAGS="-arch x86_64"
+HOST_FLAGS="${ARCH_FLAGS} -mios-simulator-version-min=8.0 -isysroot $(xcrun -sdk ${SDK} --show-sdk-path)"
+CHOST="x86_64-apple-darwin"
+cd /tmp/protobuf-$PB_VERSION
+./autogen.sh
+make distclean
+dobuild
+
+#(
+#    cd /tmp/protobuf-$PB_VERSION
+#    ./autogen.sh
+#    make distclean
+#    ./configure --build=x86_64-apple-darwin --host=x86_64-apple-darwin --with-protoc=${PREFIX}/platform/x86_64/bin/protoc --disable-shared --prefix=${PREFIX} --exec-prefix=${PREFIX}/platform/x86_64_ios "CC=${CC}" "CFLAGS=${CFLAGS} -arch x86_64 -isysroot ${IPHONESIMULATOR_SYSROOT}" "CXX=${CXX}" "CXXFLAGS=${CXXFLAGS} -arch x86_64 -isysroot ${IPHONESIMULATOR_SYSROOT} -mios-simulator-version-min=${IOS_MIN_SDK}" LDFLAGS="-arch x86_64 -mios-simulator-version-min=${IOS_MIN_SDK} ${LDFLAGS}" "LIBS=${LIBS}"
+#    make ${EXTRA_MAKE_FLAGS}
+#    make ${EXTRA_MAKE_FLAGS} install
+#)
 
 X86_64_IOS_SIM_PROTOBUF=x86_64_ios/lib/libprotobuf.a
 X86_64_IOS_SIM_PROTOBUF_LITE=x86_64_ios/lib/libprotobuf-lite.a
@@ -168,34 +192,6 @@ else
 
 X86_64_IOS_SIM_PROTOBUF=
 X86_64_IOS_SIM_PROTOBUF_LITE=
-
-fi
-
-if [ $BUILD_I386_IOS_SIM -eq 1 ]
-then
-
-echo "$(tput setaf 2)"
-echo "###########################"
-echo " i386 for iPhone Simulator"
-echo "###########################"
-echo "$(tput sgr0)"
-
-(
-    cd /tmp/protobuf-$PB_VERSION
-    ./autogen.sh
-    make distclean
-    ./configure --build=x86_64-apple-darwin13.0.0 --host=i386-apple-darwin13.0.0 --with-protoc=${PREFIX}/platform/x86_64/bin/protoc --disable-shared --prefix=${PREFIX} --exec-prefix=${PREFIX}/platform/i386 "CC=${CC}" "CFLAGS=${CFLAGS} -miphonesimulator-version-min=${IOS_MIN_SDK} -arch i386 -isysroot ${IPHONESIMULATOR_SYSROOT}" "CXX=${CXX}" "CXXFLAGS=${CXXFLAGS} -arch i386 -isysroot ${IPHONESIMULATOR_SYSROOT} -miphonesimulator-version-min=${IOS_MIN_SDK}" LDFLAGS="-arch i386 -miphonesimulator-version-min=${IOS_MIN_SDK} ${LDFLAGS}" "LIBS=${LIBS}"
-    make ${EXTRA_MAKE_FLAGS}
-    make ${EXTRA_MAKE_FLAGS} install
-)
-
-I386_IOS_SIM_PROTOBUF=i386/lib/libprotobuf.a
-I386_IOS_SIM_PROTOBUF_LITE=i386/lib/libprotobuf-lite.a
-
-else
-
-I386_IOS_SIM_PROTOBUF=
-I386_IOS_SIM_PROTOBUF_LITE=
 
 fi
 
@@ -311,9 +307,9 @@ echo "$(tput sgr0)"
     cd ${PREFIX}/platform
     mkdir universal
 
-    lipo ${ARM64_IPHONE_PROTOBUF} ${ARMV7S_IPHONE_PROTOBUF} ${ARMV7_IPHONE_PROTOBUF} ${I386_IOS_SIM_PROTOBUF} ${X86_64_IOS_SIM_PROTOBUF} -create -output universal/libprotobuf.a
+    lipo ${ARM64_IPHONE_PROTOBUF} ${ARMV7S_IPHONE_PROTOBUF} ${ARMV7_IPHONE_PROTOBUF} ${X86_64_IOS_SIM_PROTOBUF} -create -output universal/libprotobuf.a
 
-    lipo ${ARM64_IPHONE_PROTOBUF_LITE} ${ARMV7S_IPHONE_PROTOBUF_LITE} ${ARMV7_IPHONE_PROTOBUF_LITE} ${I386_IOS_SIM_PROTOBUF_LITE} ${X86_64_IOS_SIM_PROTOBUF_LITE} -create -output universal/libprotobuf-lite.a
+    lipo ${ARM64_IPHONE_PROTOBUF_LITE} ${ARMV7S_IPHONE_PROTOBUF_LITE} ${ARMV7_IPHONE_PROTOBUF_LITE} ${X86_64_IOS_SIM_PROTOBUF_LITE} -create -output universal/libprotobuf-lite.a
 )
 
 echo "$(tput setaf 2)"
