@@ -9,11 +9,11 @@ echo "$(tput sgr0)"
 # universal binaries and libraries this script produces.
 # Set each to '1' to include, '0' to exclude.
 BUILD_X86_64_MAC=1
-BUILD_X86_64_IOS_SIM=0
+BUILD_X86_64_IOS_SIM=1
 BUILD_I386_IOS_SIM=0
-BUILD_ARMV7_IPHONE=1
-BUILD_ARMV7S_IPHONE=1
-BUILD_ARM64_IPHONE=1
+BUILD_ARMV7_IPHONE=0
+BUILD_ARMV7S_IPHONE=0
+BUILD_ARM64_IPHONE=0
 
 PB_VERSION=3.2.0
 
@@ -156,7 +156,7 @@ echo "$(tput sgr0)"
     cd /tmp/protobuf-$PB_VERSION
     ./autogen.sh
     make distclean
-    ./configure --build=x86_64-apple-darwin13.0.0 --host=x86_64-apple-darwin13.0.0 --with-protoc=${PREFIX}/platform/x86_64/bin/protoc --disable-shared --prefix=${PREFIX} --exec-prefix=${PREFIX}/platform/x86_64_ios "CC=${CC}" "CFLAGS=${CFLAGS} -miphoneos-version-min=${IOS_MIN_SDK} -arch x86_64 -isysroot ${IPHONESIMULATOR_SYSROOT}" "CXX=${CXX}" "CXXFLAGS=${CXXFLAGS} -arch x86_64 -isysroot ${IPHONESIMULATOR_SYSROOT} -miphoneos-version-min=${IOS_MIN_SDK}" LDFLAGS="-arch x86_64 -miphoneos-version-min=${IOS_MIN_SDK} ${LDFLAGS}" "LIBS=${LIBS}"
+    ./configure --build=x86_64-apple-darwin13.0.0 --host=x86_64-apple-darwin13.0.0 --with-protoc=${PREFIX}/platform/x86_64/bin/protoc --disable-shared --prefix=${PREFIX} --exec-prefix=${PREFIX}/platform/x86_64_ios "CC=${CC}" "CFLAGS=${CFLAGS} -miphoneos-version-min=${IOS_MIN_SDK} -arch x86_64 -isysroot ${IPHONESIMULATOR_SYSROOT}" "CXX=${CXX}" "CXXFLAGS=${CXXFLAGS} -arch x86_64 -isysroot ${IPHONESIMULATOR_SYSROOT} -miphonesimulator-version-min=${IOS_MIN_SDK}" LDFLAGS="-arch x86_64 -miphonesimulator-version-min=${IOS_MIN_SDK} ${LDFLAGS}" "LIBS=${LIBS}"
     make ${EXTRA_MAKE_FLAGS}
     make ${EXTRA_MAKE_FLAGS} install
 )
@@ -184,7 +184,7 @@ echo "$(tput sgr0)"
     cd /tmp/protobuf-$PB_VERSION
     ./autogen.sh
     make distclean
-    ./configure --build=x86_64-apple-darwin13.0.0 --host=i386-apple-darwin13.0.0 --with-protoc=${PREFIX}/platform/x86_64/bin/protoc --disable-shared --prefix=${PREFIX} --exec-prefix=${PREFIX}/platform/i386 "CC=${CC}" "CFLAGS=${CFLAGS} -miphoneos-version-min=${IOS_MIN_SDK} -arch i386 -isysroot ${IPHONESIMULATOR_SYSROOT}" "CXX=${CXX}" "CXXFLAGS=${CXXFLAGS} -arch i386 -isysroot ${IPHONESIMULATOR_SYSROOT} -miphoneos-version-min=${IOS_MIN_SDK}" LDFLAGS="-arch i386 -miphoneos-version-min=${IOS_MIN_SDK} ${LDFLAGS}" "LIBS=${LIBS}"
+    ./configure --build=x86_64-apple-darwin13.0.0 --host=i386-apple-darwin13.0.0 --with-protoc=${PREFIX}/platform/x86_64/bin/protoc --disable-shared --prefix=${PREFIX} --exec-prefix=${PREFIX}/platform/i386 "CC=${CC}" "CFLAGS=${CFLAGS} -miphonesimulator-version-min=${IOS_MIN_SDK} -arch i386 -isysroot ${IPHONESIMULATOR_SYSROOT}" "CXX=${CXX}" "CXXFLAGS=${CXXFLAGS} -arch i386 -isysroot ${IPHONESIMULATOR_SYSROOT} -miphonesimulator-version-min=${IOS_MIN_SDK}" LDFLAGS="-arch i386 -miphonesimulator-version-min=${IOS_MIN_SDK} ${LDFLAGS}" "LIBS=${LIBS}"
     make ${EXTRA_MAKE_FLAGS}
     make ${EXTRA_MAKE_FLAGS} install
 )

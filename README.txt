@@ -15,7 +15,7 @@ To build protobuf for iOS:
 
 4. Set PB_VERSION to the protobuf version you want to build. It will be downloaded.
 
-5. Run the script. The protobuf/include folder will contain the headers, and the libs will be in protobuf/universal. Use libprotobuf-lite.a.
+5. Run the script. The protobuf/include folder will contain the headers, and the libs will be in protobuf/universal. Use libprotobuf-lite.a. (If compiling the simulator, the libs may end up in protobuf/platform/x86_64/lib)
 
 6. For all generated protobuf code (e.g. Nodes.ph.h), redefine the google namespace to the value you set for GOOGLE_NAMESPACE above. Ensure this is *only* added for the iOS build, e.g.:
 
