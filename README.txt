@@ -37,7 +37,11 @@ Android
 cd NDK_PATH/build/tools
 (on Raj's computer: /Users/radvani/Library/Android/sdk/ndk-bundle/build/tools)
 
-./make-standalone-toolchain.sh --platform=android-23 --stl=libc++ --install-dir=/Users/radvani/Source/ndk-toolchain/android-23
+./make-standalone-toolchain.sh --platform=android-23 --install-dir=/Users/radvani/Source/ndk-toolchain/android-23
+
+For the arm64_v8a version we need a 64-bit toolchain. Generate this with a similar command:
+
+./make-standalone-toolchain.sh --platform=android-23 --arch=arm64 --install-dir=/Users/radvani/Source/ndk-toolchain/android-23_arm64
 
 (Note: when ready to switch to libc++ STL, add the -stl=libc++ argument when creating the toolchain)
 
