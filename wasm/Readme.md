@@ -1,26 +1,14 @@
-About
+Protobuf WebAssembly
 -----
 
 Emscripten port of Google's Protobuf library.
 
-Building
---------
+## Patching
 
-    cd 3.2.0
-    sh autogen.sh
-    emconfigure ./configure
-    emmake Make
+The 3.1 and 3.2 version of protobuf have been patched, as per the changes found in the diff in the patches directory. If bringing in a new version of protobuf, patch it similarly. Do not worry about patching the Makefile, since we don't use the Makefile for WebAssembly.
 
-This will generate a dynamic library in `src/.libs/` called `libprotobuf.$(VERSION).[so|dylib]`.
-Though the suffix suggests that this is a regular dylib, it contains emscripten bytecode.
-Change the suffix to `.bc` and you'll be able to link it into your emscripten project.
+## Building
 
-The `protoc` compiler will not be build but any code generate by the standard `protoc` is compatible
-with emscripten.
-
-License
--------
-
-Protobuf: Original license
-
-Patches: Public Domain
+Protobuf is built alongside /ViroRenderer
+Copy the source files into /ViroRenderer/wasm/libs/protobuf/src
+Edit the CMakeLists there accordingly if there are new files that have been introduced

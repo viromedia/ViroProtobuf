@@ -47,6 +47,7 @@
 #define snprintf _snprintf    // see comment in strutil.cc
 #elif defined(HAVE_PTHREAD)
 #include <pthread.h>
+#elif defined(EMSCRIPTEN) // Emscripten doesn't have threading support
 #else
 #error "No suitable threading library available."
 #endif
@@ -355,6 +356,22 @@ void Mutex::AssertHeld() {
 #endif
 }
 
+#elif defined(EMSCRIPTEN)
+    
+struct Mutex::Internal {};
+    
+Mutex::Mutex()
+     : mInternal(new Internal) {
+}
+    
+Mutex::~Mutex() {}
+    
+void Mutex::Lock() {}
+   
+void Mutex::Unlock() {}
+    
+void Mutex::AssertHeld() {}
+    
 #elif defined(HAVE_PTHREAD)
 
 struct Mutex::Internal {
