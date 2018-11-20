@@ -1,0 +1,32 @@
+google/protobuf/compiler/js/well_known_types_embed.lo: \
+  google/protobuf/compiler/js/well_known_types_embed.cc \
+  google/protobuf/compiler/js/well_known_types_embed.h \
+  /Users/radvani/Source/ndk-toolchain/android-28_arm64/bin/../lib/gcc/aarch64-linux-android/4.9.x/../../../../include/c++/4.9.x/stddef.h \
+  /Users/radvani/Source/ndk-toolchain/android-28_arm64/bin/../lib/gcc/aarch64-linux-android/4.9.x/../../../../include/c++/4.9.x/__config \
+  /Users/radvani/Source/ndk-toolchain/android-28_arm64/bin/../sysroot/usr/include/features.h \
+  /Users/radvani/Source/ndk-toolchain/android-28_arm64/bin/../sysroot/usr/include/sys/cdefs.h \
+  /Users/radvani/Source/ndk-toolchain/android-28_arm64/bin/../sysroot/usr/include/android/api-level.h \
+  /Users/radvani/Source/ndk-toolchain/android-28_arm64/bin/../sysroot/usr/include/android/versioning.h \
+  /Users/radvani/Source/ndk-toolchain/android-28_arm64/lib64/clang/7.0.2/include/stddef.h \
+  /Users/radvani/Source/ndk-toolchain/android-28_arm64/lib64/clang/7.0.2/include/__stddef_max_align_t.h \
+  /Users/radvani/Source/ndk-toolchain/android-28_arm64/bin/../lib/gcc/aarch64-linux-android/4.9.x/../../../../include/c++/4.9.x/__nullptr
+
+google/protobuf/compiler/js/well_known_types_embed.h:
+
+/Users/radvani/Source/ndk-toolchain/android-28_arm64/bin/../lib/gcc/aarch64-linux-android/4.9.x/../../../../include/c++/4.9.x/stddef.h:
+
+/Users/radvani/Source/ndk-toolchain/android-28_arm64/bin/../lib/gcc/aarch64-linux-android/4.9.x/../../../../include/c++/4.9.x/__config:
+
+/Users/radvani/Source/ndk-toolchain/android-28_arm64/bin/../sysroot/usr/include/features.h:
+
+/Users/radvani/Source/ndk-toolchain/android-28_arm64/bin/../sysroot/usr/include/sys/cdefs.h:
+
+/Users/radvani/Source/ndk-toolchain/android-28_arm64/bin/../sysroot/usr/include/android/api-level.h:
+
+/Users/radvani/Source/ndk-toolchain/android-28_arm64/bin/../sysroot/usr/include/android/versioning.h:
+
+/Users/radvani/Source/ndk-toolchain/android-28_arm64/lib64/clang/7.0.2/include/stddef.h:
+
+/Users/radvani/Source/ndk-toolchain/android-28_arm64/lib64/clang/7.0.2/include/__stddef_max_align_t.h:
+
+/Users/radvani/Source/ndk-toolchain/android-28_arm64/bin/../lib/gcc/aarch64-linux-android/4.9.x/../../../../include/c++/4.9.x/__nullptr:
